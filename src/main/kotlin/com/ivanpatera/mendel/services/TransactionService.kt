@@ -21,7 +21,8 @@ class TransactionService: ITransactionService {
     }
 
     override fun getTransactionsSum(transactionId: Long): Double {
-        println("Transaction ID: $transactionId")
-        return 0.0
+        return transactions[transactionId]?.let {
+            it.amount + it.children.map { getTransactionsSum(it) }.sum()
+        } ?: throw IllegalArgumentException("TXN_NOT_FOUND")
     }
 }
