@@ -32,5 +32,15 @@ class TransactionServiceTest {
         }
     }
 
+    @Test
+    fun `getTransactionsForType with no transactions should return empty list`() {
+        assertEquals(0, transactionService.getTransactionsForType("type").size)
+    }
+
+    @Test
+    fun `getTransactionsForType with n transactions should return a full list`() {
+        assertEquals(1, transactionService.getTransactionsForType("test").size)
+    }
+
    
 }

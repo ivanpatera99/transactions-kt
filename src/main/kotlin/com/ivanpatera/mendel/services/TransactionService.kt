@@ -16,8 +16,8 @@ class TransactionService: ITransactionService {
         transactions[transactionId] = newTransaction
     }
 
-    override fun getTransactionsForType(type: String) {
-        println("Type: $type")
+    override fun getTransactionsForType(type: String): MutableList<Long> {
+        return transactions.filter { it.value.type == type }.keys.toMutableList()
     }
 
     override fun getTransactionsSum(transactionId: Long): Double {
