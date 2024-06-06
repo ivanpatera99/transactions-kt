@@ -42,16 +42,27 @@ class TransactionServiceTest {
         assertEquals(1, transactionService.getTransactionsForType("test").size)
     }
 
-   @Test
-   fun `getTransactionsSum for a transaction with no children`(){
-       assertEquals(120.4, transactionService.getTransactionsSum(4))
-   }
+    @Test
+    fun `getTransactionsSum for a transaction with no children`(){
+        assertEquals(120.4, transactionService.getTransactionsSum(4))
+    }
 
-   @Test
+    @Test
     fun `getTransactionsSum for a transaction with children`(){
          transactionService.putTransaction(2, 200.0, "type2", 4)
          transactionService.putTransaction(3, 300.0, "type3", 2)
          assertEquals(620.4, transactionService.getTransactionsSum(4))
+         assertEquals(500.0, transactionService.getTransactionsSum(2))
+    }
+
+    @Test 
+    fun `getTransactionsSum for a transaction with nested children`(){
+        transactionService.putTransaction(10, 200.0, "type2", 4)
+        transactionService.putTransaction(11, 300.0, "type3", 4)
+        transactionService.putTransaction(12, 500.0, "type5", 11)
+        assertEquals(1120.4, transactionService.getTransactionsSum(4))
+        assertEquals(800.0, transactionService.getTransactionsSum(11))
+        assertEquals(500.0, transactionService.getTransactionsSum(12))
     }
 
     @Test
