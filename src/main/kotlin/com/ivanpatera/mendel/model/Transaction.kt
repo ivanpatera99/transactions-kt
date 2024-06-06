@@ -1,3 +1,5 @@
+package com.ivanpatera.mendel.model
+
 data class Transaction(
     val id: Long,
     val amount: Double,
