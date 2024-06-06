@@ -1,6 +1,6 @@
 # Transactions service
 
-This project is a test project to track transactions.
+This is a test project to track transactions.
 
 ## Setup
 
