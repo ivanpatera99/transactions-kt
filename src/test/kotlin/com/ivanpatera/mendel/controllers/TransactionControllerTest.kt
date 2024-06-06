@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.junit.jupiter.api.BeforeEach
@@ -89,6 +90,29 @@ class TransactionControllerTest {
             .content(objectMapper.writeValueAsString(transactionRequestBodyDTO)))
             .andExpect(status().isConflict())
             .andExpect(content().json("""{"error":"TXN_ALREADY_EXISTS"}"""))
+    }
+
+    @Test
+    fun `getTransactionsForType should return an empty list when no transactions are found`() {
+        val type = "type"
+
+        Mockito.`when`(transactionService.getTransactionsForType(type)).thenReturn(mutableListOf())
+
+        mockMvc.perform(get("/transactions/types/$type"))
+            .andExpect(status().isOk)
+            .andExpect(content().json("""{"transactions":[]}"""))
+    }
+
+    @Test
+    fun `getTransactionsForType should return a list of transactions when transactions are found`() {
+        val type = "type"
+        val transactions = mutableListOf(1L, 2L, 3L)
+
+        Mockito.`when`(transactionService.getTransactionsForType(type)).thenReturn(transactions)
+
+        mockMvc.perform(get("/transactions/types/$type"))
+            .andExpect(status().isOk)
+            .andExpect(content().json("""{"transactions":[1,2,3]}"""))
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.ivanpatera.mendel.services.TransactionService
 import com.ivanpatera.mendel.dto.TransactionRequestBodyDTO
 import com.ivanpatera.mendel.dto.TransactionResponseDTO
+import com.ivanpatera.mendel.dto.TransactionListForTypeDTO
 
 @RestController()
 @RequestMapping("/transactions")
@@ -33,6 +34,12 @@ class TransactionController @Autowired constructor(private val transactionServic
                 return ResponseEntity.internalServerError().body(mapOf("error" to "INTERNAL_SERVER_ERROR"))
             }
         }
+    }
+
+    @GetMapping("/types/{type}")
+    fun getTransactionsForType(@PathVariable type: String): ResponseEntity<Any> {
+        val transactionsIds = transactionService.getTransactionsForType(type)
+        return ResponseEntity.ok().body(TransactionListForTypeDTO(transactionsIds))
     }
     
 }
