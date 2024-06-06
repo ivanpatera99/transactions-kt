@@ -21,6 +21,13 @@ class TransactionServiceTest {
     }
 
     @Test
+    fun `putTransaction with existing transaction should throw`() {
+        assertThrows<IllegalArgumentException> {
+            transactionService.putTransaction(4, 120.4, "test", null)
+        }
+    }
+
+    @Test
     fun `putTransaction with parent transaction`() {
         transactionService.putTransaction(2, 200.0, "type2", 4)
         assertNotNull(transactionService.transactions[2])
@@ -28,7 +35,7 @@ class TransactionServiceTest {
     }
 
     @Test 
-    fun `putTransaction with non-existent parent transaction`() {
+    fun `putTransaction with non-existent parent transaction should throw`() {
         assertThrows<IllegalArgumentException> {
             transactionService.putTransaction(3, 300.0, "type3", 5)
         }
@@ -68,7 +75,7 @@ class TransactionServiceTest {
     }
 
     @Test
-    fun `getTransactionsSum for a non-existent transaction`(){
+    fun `getTransactionsSum for a non-existent transaction should throw`(){
         assertThrows<IllegalArgumentException> {
             transactionService.getTransactionsSum(5)
         }

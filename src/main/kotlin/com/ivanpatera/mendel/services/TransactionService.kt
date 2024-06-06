@@ -9,7 +9,9 @@ class TransactionService: ITransactionService {
     val transactions = mutableMapOf<Long, Transaction>()
 
     override fun putTransaction(transactionId: Long, amount: Double, type: String, parentId: Long?) {
-        // TODO: check if transactionId is already present
+        if (transactions.containsKey(transactionId)) {
+            throw IllegalArgumentException("TXN_ALREADY_EXISTS")
+        }
         val newTransaction = Transaction(transactionId, amount, type)
         parentId?.let { 
             if (!transactions.containsKey(it)) { 
