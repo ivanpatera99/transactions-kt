@@ -1,5 +1,5 @@
 package com.ivanpatera.mendel.dto
 
-data class TransactionListForTypeDTO(
+data class TransactionListForTypeResponseDTO(
     val transactions: List<Long>
 )

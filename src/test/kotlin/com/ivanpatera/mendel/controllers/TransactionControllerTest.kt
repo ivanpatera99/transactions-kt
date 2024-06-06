@@ -115,4 +115,27 @@ class TransactionControllerTest {
             .andExpect(content().json("""{"transactions":[1,2,3]}"""))
     }
 
+    @Test
+    fun `getTransactionsSum should return 404 when transaction is not found`() {
+        val transactionId = 1L
+
+        Mockito.`when`(transactionService.getTransactionsSum(transactionId)).thenThrow(IllegalArgumentException("TXN_NOT_FOUND"))
+
+        mockMvc.perform(get("/transactions/sum/$transactionId"))
+            .andExpect(status().isNotFound)
+            .andExpect(content().json("""{"error":"TXN_NOT_FOUND"}"""))
+    }
+
+    @Test
+    fun `getTransactionsSum should return the sum of transactions when transaction is found`() {
+        val transactionId = 1L
+        val sum = 100.0
+
+        Mockito.`when`(transactionService.getTransactionsSum(transactionId)).thenReturn(sum)
+
+        mockMvc.perform(get("/transactions/sum/$transactionId"))
+            .andExpect(status().isOk)
+            .andExpect(content().json("""{"sum":100.0}"""))
+    }
+
 }

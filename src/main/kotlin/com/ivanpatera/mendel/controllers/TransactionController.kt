@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.ivanpatera.mendel.services.TransactionService
 import com.ivanpatera.mendel.dto.TransactionRequestBodyDTO
 import com.ivanpatera.mendel.dto.TransactionResponseDTO
-import com.ivanpatera.mendel.dto.TransactionListForTypeDTO
+import com.ivanpatera.mendel.dto.TransactionListForTypeResponseDTO
+import com.ivanpatera.mendel.dto.TransactionsSumResponseDTO
 
 @RestController()
 @RequestMapping("/transactions")
@@ -39,7 +40,21 @@ class TransactionController @Autowired constructor(private val transactionServic
     @GetMapping("/types/{type}")
     fun getTransactionsForType(@PathVariable type: String): ResponseEntity<Any> {
         val transactionsIds = transactionService.getTransactionsForType(type)
-        return ResponseEntity.ok().body(TransactionListForTypeDTO(transactionsIds))
+        return ResponseEntity.ok().body(TransactionListForTypeResponseDTO(transactionsIds))
+    }
+
+    @GetMapping("/sum/{transactionId}")
+    fun getTransactionsSum(@PathVariable transactionId: Long): ResponseEntity<Any> {
+        try {
+            val sum = transactionService.getTransactionsSum(transactionId)
+            return ResponseEntity.ok().body(TransactionsSumResponseDTO(sum))
+        } catch (e: Exception) {
+            if (e.message == "TXN_NOT_FOUND") {
+                return ResponseEntity.status(404).body(mapOf("error" to "TXN_NOT_FOUND"))
+            } else {
+                return ResponseEntity.internalServerError().body(mapOf("error" to "INTERNAL_SERVER_ERROR"))
+            }
+        }
     }
     
 }
