@@ -1,4 +1,4 @@
-# Transactions serivice
+# Transactions service
 
 This project is a test project to track transactions.
 
@@ -70,4 +70,10 @@ It also returns a 404 if the provided transactionId is not found:
 {
     "error": "TXN_NOT_FOUND"
 }
+```
+## Tests
+
+run the tests using the `mvnw` like this:
+```
+./mvnw test
 ```
